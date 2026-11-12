@@ -1,0 +1,82 @@
+name: CI/CD - RioAlerta
+
+# Gatilhos:
+# - push na main: roda CI e publica no GitHub Pages (CD)
+# - pull_request para a main: roda apenas o CI (instalação, testes e build)
+# - workflow_dispatch: permite rodar manualmente pela aba Actions
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: CI - instalar, testar e gerar build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Validar HTML (html-validate)
+        run: npm run lint
+
+      - name: Executar testes automatizados
+        run: npm test
+
+      - name: Gerar build (pasta dist)
+        run: npm run build
+
+      - name: Enviar build como artefato do Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: CD - publicar no GitHub Pages
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Validar que a versão publicada é o commit atual
+        env:
+          URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          SHA_CURTO="${GITHUB_SHA::7}"
+          for tentativa in 1 2 3 4 5 6 7 8 9 10; do
+            if curl -fsSL "${URL}?v=${SHA_CURTO}" | grep -q "$SHA_CURTO"; then
+              echo "Aplicação publicada em $URL com o commit $SHA_CURTO"
+              exit 0
+            fi
+            echo "Tentativa $tentativa: versão ainda não propagou, aguardando 15s..."
+            sleep 15
+          done
+          echo "A página publicada não exibe o commit $SHA_CURTO"
+          exit 1
