@@ -111,6 +111,21 @@ main { max-width: 1080px; margin: 0 auto; padding: 24px; }
 
 .vazio { color: var(--suave); }
 
+.pontos-apoio { margin-top: 32px; }
+.pontos-apoio h2 { color: var(--azul); font-size: 1.3rem; margin-bottom: 4px; }
+.apoio-legenda { margin: 0 0 14px; color: var(--suave); font-size: 0.9rem; }
+.lista-apoio { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.apoio {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-left: 6px solid var(--azul);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+}
+.apoio h3 { margin: 0 0 4px; font-size: 1rem; }
+.apoio p { margin: 0; font-size: 0.85rem; color: var(--suave); }
+.apoio .capacidade { margin-top: 6px; color: var(--texto); }
+
 .contatos { margin-top: 32px; }
 .contatos h2 { color: var(--azul); font-size: 1.3rem; }
 .lista-contatos { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
