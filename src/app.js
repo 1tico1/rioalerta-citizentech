@@ -1,5 +1,5 @@
-import { BAIRROS, CONTATOS } from "./data.js";
-import { classificarRisco, filtrarBairros, ordenarPorRisco, resumoPorNivel } from "./logic.js";
+import { BAIRROS, CONTATOS, PONTOS_APOIO } from "./data.js";
+import { classificarRisco, filtrarBairros, ordenarPorRisco, resumoPorNivel, pontosDeApoioPorZona } from "./logic.js";
 
 const lista = document.querySelector("#lista-bairros");
 const campoBusca = document.querySelector("#busca");
@@ -41,6 +41,23 @@ function renderBairros() {
   }
 }
 
+function renderPontosDeApoio() {
+  const alvo = document.querySelector("#lista-apoio");
+  const zona = campoZona.value;
+  const pontos = pontosDeApoioPorZona(PONTOS_APOIO, zona);
+  document.querySelector("#apoio-zona").textContent = zona === "Todas" ? "todas as zonas" : `zona ${zona}`;
+  alvo.innerHTML = pontos
+    .map(
+      (p) => `
+    <article class="apoio">
+      <h3>${p.nome}</h3>
+      <p>${p.endereco} · Zona ${p.zona}</p>
+      <p class="capacidade">Capacidade: <strong>${p.capacidade} pessoas</strong></p>
+    </article>`
+    )
+    .join("");
+}
+
 function renderContatos() {
   const alvo = document.querySelector("#lista-contatos");
   alvo.innerHTML = CONTATOS.map(
@@ -53,8 +70,12 @@ function renderContatos() {
 }
 
 campoBusca.addEventListener("input", renderBairros);
-campoZona.addEventListener("change", renderBairros);
+campoZona.addEventListener("change", () => {
+  renderBairros();
+  renderPontosDeApoio();
+});
 
 renderResumo();
 renderBairros();
+renderPontosDeApoio();
 renderContatos();
