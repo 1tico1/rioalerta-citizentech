@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RioAlerta — Alerta cidadão de enchentes</title>
+  <meta name="description" content="Consulte o risco de enchente no seu bairro e saiba a quem recorrer.">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="marca">
+      <span class="logo" aria-hidden="true">≋</span>
+      <div>
+        <h1>RioAlerta</h1>
+        <p>Alerta cidadão de enchentes · São Paulo</p>
+      </div>
+    </div>
+    <span class="versao">v1.0.0</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Como está o risco de enchente no seu bairro?</h2>
+      <p>Consulte o nível de risco calculado a partir da chuva acumulada nas últimas 24 horas e veja o que fazer em cada situação.</p>
+      <p class="aviso">Dados simulados para demonstração acadêmica (FIAP · Global Solution 2026.2).</p>
+    </section>
+
+    <section class="resumo" aria-label="Resumo por nível de risco">
+      <div class="pill risco-critico"><span data-resumo="critico">0</span> Crítico</div>
+      <div class="pill risco-alto"><span data-resumo="alto">0</span> Alto</div>
+      <div class="pill risco-atencao"><span data-resumo="atencao">0</span> Atenção</div>
+      <div class="pill risco-baixo"><span data-resumo="baixo">0</span> Baixo</div>
+    </section>
+
+    <section class="filtros">
+      <label>Buscar bairro
+        <input id="busca" type="search" placeholder="Ex.: Ipiranga" autocomplete="off">
+      </label>
+      <label>Zona
+        <select id="zona">
+          <option>Todas</option>
+          <option>Centro</option>
+          <option>Norte</option>
+          <option>Sul</option>
+          <option>Leste</option>
+          <option>Oeste</option>
+        </select>
+      </label>
+      <p id="contador" class="contador"></p>
+    </section>
+
+    <section id="lista-bairros" class="grade" aria-live="polite"></section>
+
+    <section class="contatos">
+      <h2>Em emergência, ligue</h2>
+      <div id="lista-contatos" class="lista-contatos"></div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p>RioAlerta · Grupo GeoCosmos · Eduardo Veiga (RM561575) e Thiago Ulrych (RM565929) · 2TSCPV</p>
+    <p class="build">Build <code>__BUILD_SHA__</code> publicado em __BUILD_DATE__ via GitHub Actions</p>
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
