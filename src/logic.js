@@ -25,7 +25,7 @@ export function classificarRisco(chuvaMm) {
 export function normalizar(texto) {
   return String(texto)
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim();
 }
@@ -52,4 +52,11 @@ export function resumoPorNivel(bairros) {
     resumo[classificarRisco(b.chuva24h).chave] += 1;
   }
   return resumo;
+}
+
+/** Lista os pontos de apoio da zona escolhida, do maior para o menor em capacidade. */
+export function pontosDeApoioPorZona(pontos, zona = "Todas") {
+  return pontos
+    .filter((p) => zona === "Todas" || p.zona === zona)
+    .sort((a, b) => b.capacidade - a.capacidade);
 }

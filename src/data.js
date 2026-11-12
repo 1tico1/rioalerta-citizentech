@@ -22,3 +22,15 @@ export const CONTATOS = [
   { servico: "SAMU", telefone: "192", descricao: "Emergências médicas" },
   { servico: "Central 156", telefone: "156", descricao: "Serviços da prefeitura e limpeza de bueiros" }
 ];
+
+// Pontos de apoio para acolhimento em caso de enchente (dados simulados).
+export const PONTOS_APOIO = [
+  { nome: "CEU Jardim Pantanal", zona: "Leste", endereco: "Rua Lagoa Formosa, 120", capacidade: 300 },
+  { nome: "EMEF Itaim Paulista", zona: "Leste", endereco: "Av. Marechal Tito, 4500", capacidade: 180 },
+  { nome: "Ginásio da Casa Verde", zona: "Norte", endereco: "Rua Zilda, 55", capacidade: 220 },
+  { nome: "CEU Paz (Brasilândia)", zona: "Norte", endereco: "Rua Daniel Cerri, 300", capacidade: 250 },
+  { nome: "Clube Escola Ipiranga", zona: "Sul", endereco: "Rua Silva Bueno, 1000", capacidade: 200 },
+  { nome: "CEU Capão Redondo", zona: "Sul", endereco: "Rua Daniel Gran Ferreira, 1000", capacidade: 280 },
+  { nome: "Centro Esportivo Cambuci", zona: "Centro", endereco: "Rua Muniz de Souza, 400", capacidade: 150 },
+  { nome: "Clube Escola Butantã", zona: "Oeste", endereco: "Av. Corifeu de Azevedo Marques, 900", capacidade: 160 }
+];

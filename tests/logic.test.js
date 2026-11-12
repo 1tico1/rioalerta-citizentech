@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classificarRisco, filtrarBairros, ordenarPorRisco, resumoPorNivel, normalizar } from "../src/logic.js";
-import { BAIRROS } from "../src/data.js";
+import { classificarRisco, filtrarBairros, ordenarPorRisco, resumoPorNivel, normalizar, pontosDeApoioPorZona } from "../src/logic.js";
+import { BAIRROS, PONTOS_APOIO } from "../src/data.js";
 
 test("classifica risco pelas faixas de chuva", () => {
   assert.equal(classificarRisco(0).chave, "baixo");
@@ -43,4 +43,23 @@ test("resumo soma a quantidade total de bairros", () => {
   const resumo = resumoPorNivel(BAIRROS);
   const total = Object.values(resumo).reduce((a, b) => a + b, 0);
   assert.equal(total, BAIRROS.length);
+});
+
+test("pontos de apoio filtram pela zona e vêm ordenados por capacidade", () => {
+  const leste = pontosDeApoioPorZona(PONTOS_APOIO, "Leste");
+  assert.ok(leste.length > 0);
+  assert.ok(leste.every((p) => p.zona === "Leste"));
+  for (let i = 1; i < leste.length; i++) {
+    assert.ok(leste[i - 1].capacidade >= leste[i].capacidade);
+  }
+  assert.equal(pontosDeApoioPorZona(PONTOS_APOIO, "Todas").length, PONTOS_APOIO.length);
+});
+
+test("toda zona com bairro em risco alto ou crítico tem ponto de apoio", () => {
+  const zonasEmRisco = new Set(
+    BAIRROS.filter((b) => ["alto", "critico"].includes(classificarRisco(b.chuva24h).chave)).map((b) => b.zona)
+  );
+  for (const zona of zonasEmRisco) {
+    assert.ok(pontosDeApoioPorZona(PONTOS_APOIO, zona).length > 0, `zona ${zona} sem ponto de apoio`);
+  }
 });
